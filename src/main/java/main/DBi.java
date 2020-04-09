@@ -19,25 +19,25 @@ public class DBi {
 		conn.close();
 	}
 	
-	public void createItem(Customer customer) throws SQLException {
-		stmt.executeUpdate("INSERT INTO customers (first_name,last_name)"+ "VALUES('" + customer.getFirstName()+"', '" +customer.getSurname()+"')");
+	public void createItem(Item item) throws SQLException {
+		stmt.executeUpdate("INSERT INTO items (name,quantity,price)"+ "VALUES('" + item.getName()+"', '" +item.getQuantity()+"', '" +item.getPrice()+"')");
 	}
 	
 	public void readItem(int id) throws SQLException {
-		ResultSet rs = stmt.executeQuery("SELECT * FROM customers WHERE customer_id = "+id);
+		ResultSet rs = stmt.executeQuery("SELECT * FROM items WHERE product_id = "+id);
 		while (rs.next()) {
-			String name = rs.getString("first_name")+ " " + rs.getString("last_name");
+			String name = rs.getString("name")+ " " + rs.getInt("quantity")+ " " + rs.getFloat("price");
 			System.out.println(name);
 		}
 	}
 		
-		public void updateItem(Customer customer) throws SQLException {
-			stmt.executeUpdate("UPDATE customers SET first_name = '"+ customer.getFirstName() + "', last_name = '" + customer.getSurname() + "' WHERE customer_id = " +customer.getId());
+		public void updateItem(Item item) throws SQLException {
+			stmt.executeUpdate("UPDATE items SET name = '"+ item.getName() + "', quantity = '" + item.getQuantity() + "', price = '" + item.getPrice() + "' WHERE product_id = " +item.getId());
 			
 		}
 		
-		public void deleteItem(Customer customer) throws SQLException {
-			stmt.executeUpdate("DELETE FROM customers WHERE customer_id = " + customer.getId());
+		public void deleteItem(int id) throws SQLException {
+			stmt.executeUpdate("DELETE FROM items WHERE product_id = " + id);
 		}
 	
 

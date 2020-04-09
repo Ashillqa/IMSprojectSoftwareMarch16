@@ -42,8 +42,8 @@ public class DB {
 		}
 		
 		//DELETE
-		public void deleteCust(Customer customer) throws SQLException {
-			stmt.executeUpdate("DELETE FROM customers WHERE customer_id = " + customer.getId());
+		public void deleteCust(int id) throws SQLException {
+			stmt.executeUpdate("DELETE FROM customers WHERE customer_id = " + id);
 		}
 	}
 

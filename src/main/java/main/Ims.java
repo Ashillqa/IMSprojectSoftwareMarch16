@@ -41,16 +41,38 @@ public class Ims {
 			ActionsC(action, gay);
 			break;
 		case "item":
-			if(action.equals("READ")) {
+			if(action.equals("READ")||action.equals("DELETE")) {
+				System.out.println("ID?: ");
+				int id = Integer.parseInt(scan.nextLine());
+				Item lez = new Item("",0,0,id);
+				ActionsI(action,lez);
 				break;
 			}
-			System.out.println("called ");		
-			break;
+				System.out.println("name");
+				String name = scan.nextLine();
+				System.out.println("quantity");
+				int quant = Integer.parseInt(scan.nextLine());
+				System.out.println("price");
+				float price = Float.parseFloat(scan.nextLine());
+				
+			if(action.equals("CREATE")) {
+				Item lez = new Item(name,quant,price);
+				ActionsI(action,lez);
+				break;
+				}
+			if(action.equals("UPDATE")) {
+				System.out.println("ID?: ");
+				int id = Integer.parseInt(scan.nextLine());
+				Item lez = new Item(name,quant,price,id);
+				ActionsI(action,lez);
+				break;
+				}
 		case "Order":
 			break;
 		}
+	}
 			
-		}
+	
 	
 	
 	
@@ -70,10 +92,44 @@ public class Ims {
 			r.readCust(var.getId());
 			break;
 		case "DELETE":
-			r.deleteCust(var);
+			r.deleteCust(var.getId());
 			System.out.println("deleted");
 		}
 	}
+	
+	public void ActionsI(String act, Item lez) throws SQLException {
+		DBi s = new DBi();
+		
+		switch(act) {
+		case "CREATE":
+			s.createItem(lez);
+			System.out.println("created");
+			break;
+		case "UPDATE":
+			s.updateItem(lez);
+			System.out.println("cjk");
+			break;
+		case "READ":
+			s.readItem(lez.getId());
+			System.out.println("rea");
+			break;
+		case "DELETE":
+			s.deleteItem(lez.getId());
+			System.out.println("deleted");
+		}
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 }
 	
 
