@@ -2,122 +2,258 @@ package main;
 
 
 import java.util.Scanner;
+
+import DB.DB;
+import DB.DBi;
+import DB.DBo;
+import tables.Customer;
+import tables.Item;
+import tables.Orders;
+
 import java.sql.SQLException;
 
 public class Ims {
 	
 	private static Scanner scan = new Scanner(System.in);
+	
 	private static String dispCat() {
-		System.out.println("choose Customer, Item or Order");
-		return scan.nextLine().toLowerCase();
-	}
+		
+		System.out.println("choose Customers, Items, Orders or Quit");
+		String x = scan.nextLine().toLowerCase();
+		if(x.equals("customers")||x.equals("orders")||x.equals("items")||x.equals("quit")) {
+			return x;
+		}else {
+			return dispCat();
+		}
+		}
 	
 	private static String chooseAction() {
 		System.out.println("choose Create, Read, Update or Delete ");
-		return scan.nextLine().toUpperCase();
+		String y = scan.nextLine().toUpperCase();
+		if(y.equals("CREATE")||y.equals("READ")||y.equals("UPDATE")||y.equals("DELETE")) {
+			return y;
+		}else {
+			return chooseAction();
+		}
 	}
 	
 	public void tester() throws SQLException {
-		String xyz  = Ims.dispCat();
-		String action = Ims.chooseAction();
-		
-		switch(xyz) {
-		
-		case "customer":
-			System.out.println("first name: ");
-			String firstName = scan.nextLine();
-			System.out.println("last: ");
-			String surname = scan.nextLine();
-			
-			if(action.equals("READ")||action.equals("DELETE")||action.equals("UPDATE")) {
-				System.out.println("ID: ");
-				int id = Integer.parseInt(scan.nextLine());
-				Customer gay = new Customer(firstName,surname,id);
-				ActionsC(action,gay);
+		boolean using = true;
+		while(using ==true) {
+			String xyz  = Ims.dispCat();
+			if(xyz.equals("quit")) {
+				scan.close();
+				System.out.println("see you soon!");
 				break;
 			}
-			Customer gay = new Customer(firstName,surname);
-			System.out.println(gay.toString());
-			ActionsC(action, gay);
-			break;
-		case "item":
-			if(action.equals("READ")||action.equals("DELETE")) {
-				System.out.println("ID?: ");
-				int id = Integer.parseInt(scan.nextLine());
-				Item lez = new Item("",0,0,id);
-				ActionsI(action,lez);
-				break;
+			try {
+				String action = Ims.chooseAction();
+				switch(xyz) {
+				case "customers":
+					if(action.equals("READ")) {
+						System.out.println("ID(Enter Zero to view all): ");
+						int cid = Integer.parseInt(scan.nextLine());
+						Customer customer = new Customer("","",cid);
+						ActionsC(action,customer);
+						break;
+					}
+					if(action.equals("DELETE")) {
+						System.out.println("Enter the customer ID: ");
+						int cid = Integer.parseInt(scan.nextLine());
+						Customer customer = new Customer("","",cid);
+						ActionsC(action,customer);
+						break;
+					}
+					System.out.println("Enter the first name: ");
+					String fname = scan.nextLine().toUpperCase();
+					System.out.println("Now the surname: ");
+					String lname = scan.nextLine().toUpperCase();
+					if(action.equals("CREATE")) {
+						Customer customer = new Customer(fname,lname);
+						ActionsC(action,customer);
+						break;
+					}
+					if(action.equals("UPDATE")) {
+						System.out.println("specify the Customer ID to apply this change to: ");
+						int cid = Integer.parseInt(scan.nextLine());
+						Customer customer = new Customer(fname,lname,cid);
+						ActionsC(action,customer);
+						break;
+					}
+				case "items":
+					if(action.equals("READ")) {
+						System.out.println("ID(Enter 0 to view all): ");
+						int pid = Integer.parseInt(scan.nextLine());
+						Item product = new Item("",0,0,pid);
+						ActionsI(action,product);
+						break;
+					}
+					if(action.equals("DELETE")) {
+						System.out.println("Enter the Product ID of the product to delete: ");
+						int pid = Integer.parseInt(scan.nextLine());
+						Item product = new Item("",0,0,pid);
+						ActionsI(action,product);
+						break;
+					}
+					if(action.equals("CREATE")) {
+						System.out.println("name");
+						String name = scan.nextLine().toLowerCase();
+						System.out.println("quantity");
+						int quant = Integer.parseInt(scan.nextLine());
+						System.out.println("price");
+						float price = Float.parseFloat(scan.nextLine());
+						Item product = new Item(name,quant,price);
+						ActionsI(action,product);
+						break;
+					}
+					if(action.equals("UPDATE")) {
+						System.out.println("Specify the product ID to apply this change to: ");
+						int pid = Integer.parseInt(scan.nextLine());
+						System.out.println("quantity");
+						int quant = Integer.parseInt(scan.nextLine());
+						System.out.println("price");
+						float price = Float.parseFloat(scan.nextLine());
+						Item product = new Item("",quant,price,pid);
+						ActionsI(action,product);
+						break;
+					}
+				case "orders":
+					if(action.equals("DELETE")) {
+						System.out.println("Enter the order ID to delete: ");
+						int oid = Integer.parseInt(scan.nextLine());
+						Orders order = new Orders(oid,0,0,0);
+						ActionsO(action,order);
+						break;
+					}
+					if(action.equals("READ")) {
+						System.out.println("ID(Enter 0 to view all: ");
+						int oid = Integer.parseInt(scan.nextLine());
+						Orders order = new Orders(oid,0,0,0);
+						ActionsO(action,order);
+						break;
+					}
+					if(action.equals("CREATE")) {
+						System.out.println("Customer ID: ");
+						int cid = Integer.parseInt(scan.nextLine());
+						System.out.println("product id: ");
+						int pid = Integer.parseInt(scan.nextLine());
+						System.out.println("quantity: ");
+						int quantity = Integer.parseInt(scan.nextLine());
+						Orders order = new Orders(0,cid,pid,quantity);
+						ActionsO(action,order);
+						break;
+					}
+					if(action.equals("UPDATE")) {
+						System.out.println("order ID: ");
+						int oid = Integer.parseInt(scan.nextLine());
+						System.out.println("product id: ");
+						int pid = Integer.parseInt(scan.nextLine());
+						System.out.println("quantity: ");
+						int quantity = Integer.parseInt(scan.nextLine());
+						Orders order = new Orders(oid,pid,quantity);
+						ActionsO(action,order);
+					}
+				}
+			}finally {
+				System.out.println("redirecting");
 			}
-				System.out.println("name");
-				String name = scan.nextLine();
-				System.out.println("quantity");
-				int quant = Integer.parseInt(scan.nextLine());
-				System.out.println("price");
-				float price = Float.parseFloat(scan.nextLine());
-				
-			if(action.equals("CREATE")) {
-				Item lez = new Item(name,quant,price);
-				ActionsI(action,lez);
-				break;
-				}
-			if(action.equals("UPDATE")) {
-				System.out.println("ID?: ");
-				int id = Integer.parseInt(scan.nextLine());
-				Item lez = new Item(name,quant,price,id);
-				ActionsI(action,lez);
-				break;
-				}
-		case "Order":
-			break;
 		}
 	}
-			
-	
-	
-	
-	
-	public void ActionsC(String act,Customer var) throws SQLException {
-		DB r = new DB();
-		switch(act) {
-		case "CREATE":
-			r.createCust(var);
-			System.out.println("created");	
-			break;
-		case "UPDATE":
-			r.updateCust(var);
-			System.out.println("cjk");
-			break;
-			
-		case "READ":
-			r.readCust(var.getId());
-			break;
-		case "DELETE":
-			r.deleteCust(var.getId());
-			System.out.println("deleted");
-		}
-	}
-	
-	public void ActionsI(String act, Item lez) throws SQLException {
-		DBi s = new DBi();
 		
-		switch(act) {
-		case "CREATE":
-			s.createItem(lez);
-			System.out.println("created");
-			break;
-		case "UPDATE":
-			s.updateItem(lez);
-			System.out.println("cjk");
-			break;
-		case "READ":
-			s.readItem(lez.getId());
-			System.out.println("rea");
-			break;
-		case "DELETE":
-			s.deleteItem(lez.getId());
-			System.out.println("deleted");
+	public void ActionsC(String act,Customer cust) throws SQLException {
+		DB custDB = new DB();
+		try {
+			switch(act) {
+			case "CREATE":
+				custDB.createCust(cust);	
+				break;
+			case "UPDATE":
+				custDB.updateCust(cust);
+				break;	
+			case "READ":
+				if(cust.getId()==0) {
+					custDB.readAllCust();
+					break;
+				}
+				custDB.readCust(cust);
+				break;
+			case "DELETE":
+				custDB.deleteCust(cust.getId());
+			}
+		}catch(Exception e) {
+			System.out.println("Something went wrong");
+		}finally {
+			custDB.Close();
 		}
 	}
+	
+	public void ActionsI(String act, Item prod) throws SQLException {
+		DBi itemDB = new DBi();
+		try {
+			switch(act) {
+			case "CREATE":
+				itemDB.createItem(prod);
+				break;
+			case "UPDATE":
+				itemDB.updateItem(prod);
+				break;
+			case "READ":
+				if(prod.getId()==0) {
+					itemDB.readAllItems();
+					break;
+				}
+				itemDB.readItem(prod);
+				break;
+			case "DELETE":
+				itemDB.deleteItem(prod);
+			}
+		}catch(Exception e) {
+			System.out.println("something went wrong");
+		}finally {
+			itemDB.Close();
+		}
+	}
+	public void ActionsO(String act, Orders order) throws SQLException {
+		DBo orderDB = new DBo();
+		try {
+			switch(act) {
+			case "CREATE":
+				orderDB.createOrder(order);
+				break;
+			case "UPDATE":
+				orderDB.updateOrder(order);
+				break;
+			case "READ":
+				orderDB.readOrder(order);
+				break;
+			case "DELETE":
+				orderDB.deleteOrder(order);
+			}
+		}catch (Exception e) {
+			System.out.println("something went wrong");
+		}finally {
+			orderDB.Close();
+		}
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	
 	

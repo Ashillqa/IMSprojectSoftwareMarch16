@@ -1,4 +1,4 @@
-package main;
+package DB;
 
 public final class DBConfig {
 	public static final String DB_URL = "jdbc:mysql://34.77.66.167/ims";

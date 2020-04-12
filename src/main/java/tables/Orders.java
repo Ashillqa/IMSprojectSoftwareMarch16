@@ -1,4 +1,4 @@
-package main;
+package tables;
 
 public class Orders {
 	
@@ -8,11 +8,14 @@ public class Orders {
 	private int quantity;
 	
 	
-	public Orders(int oid) {
+	public Orders(int oid,int pid, int quantity) {
 		this.oid=oid;	
+		this.pid=pid;
+		this.quantity=quantity;
 	}
 	
-	public Orders(int cid, int pid, int quantity) {
+	public Orders(int oid,int cid, int pid, int quantity) {
+		this.oid=oid;
 		this.cid=cid;
 		this.pid= pid;
 		this.quantity=quantity;
@@ -80,7 +83,4 @@ public class Orders {
 			return false;
 		return true;
 	}
-	
-	
-
 }
