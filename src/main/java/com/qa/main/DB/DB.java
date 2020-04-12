@@ -1,11 +1,11 @@
-package DB;
+package com.qa.main.DB;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import tables.Customer;
+import com.qa.main.tables.Customer;
 
 public class DB {
 	private Connection conn;

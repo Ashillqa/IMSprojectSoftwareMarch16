@@ -1,4 +1,4 @@
-package main;
+package com.qa.main;
 import java.sql.SQLException;
 
 public class Runner {

@@ -1,4 +1,4 @@
-package DB;
+package com.qa.main.DB;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -7,7 +7,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-import tables.Item;
+import com.qa.main.tables.Item;
 
 public class DBi {
 	

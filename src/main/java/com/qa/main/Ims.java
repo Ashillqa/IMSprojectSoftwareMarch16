@@ -1,14 +1,14 @@
-package main;
+package com.qa.main;
 
 
 import java.util.Scanner;
 
-import DB.DB;
-import DB.DBi;
-import DB.DBo;
-import tables.Customer;
-import tables.Item;
-import tables.Orders;
+import com.qa.main.DB.DB;
+import com.qa.main.DB.DBi;
+import com.qa.main.DB.DBo;
+import com.qa.main.tables.Customer;
+import com.qa.main.tables.Item;
+import com.qa.main.tables.Orders;
 
 import java.sql.SQLException;
 
