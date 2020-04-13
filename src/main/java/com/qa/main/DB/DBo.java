@@ -59,8 +59,19 @@ public void createOrder(Orders order) throws SQLException {
 	}
 
 public void deleteOrder(Orders order) throws SQLException {
+	int orderID =0;
+	ResultSet rs = stmt.executeQuery("Select order_id from orders where order_id = "+order.getOid());
+	while(rs.next()) {
+		orderID = rs.getInt("order_id");
+	}
+	if(orderID==0) {
+		System.out.println("order ID does not match");
+	}else {
+		stmt.executeUpdate("DELETE from orders WHERE order_id = "+ order.getOid());
+		stmt.executeUpdate("Alter table orders AUTO_INCREMENT = "+(order.getOid()-1));
+	}
 	
-	stmt.executeUpdate("DELETE from orders WHERE order_id = "+ order.getOid());
+	
 }
 
 public void updateOrder(Orders order) throws SQLException {
@@ -115,9 +126,9 @@ public void updateOrder(Orders order) throws SQLException {
 
 public void readOrder(Orders order) throws SQLException{
 	String x="";
-	ResultSet rs1 =  stmt.executeQuery("Select first_name from customers join orders on orders.customer_id = customers.customer_id where order_id = "+order.getOid());
+	ResultSet rs1 =  stmt.executeQuery("Select first_name,last_name from customers join orders on orders.customer_id = customers.customer_id where order_id = "+order.getOid());
 	while(rs1.next()) {
-		String name = rs1.getString("first_name");
+		String name = rs1.getString("first_name")+" "+rs1.getString("last_name");
 		x+= name + " ";
 	}
 	ResultSet rs2 =  stmt.executeQuery("Select name from items join orders on orders.product_id = items.product_id where order_id = "+order.getOid());
@@ -131,6 +142,29 @@ public void readOrder(Orders order) throws SQLException{
 		System.out.println(x+" Total £"+tot);
 	}
 }
+
+public void readAllOrders() throws SQLException {
+	String x = "";
+	ResultSet rs1 =  stmt.executeQuery("Select first_name,last_name from customers join orders on orders.customer_id = customers.customer_id");
+	while(rs1.next()) {
+		String name = rs1.getString("first_name")+" "+rs1.getString("last_name");
+		x+= name + " ";
+	}
+	ResultSet rs2 =  stmt.executeQuery("Select name from items join orders on orders.product_id = items.product_id");
+	while(rs2.next()) {
+		String prod = rs2.getString("name");
+		x+=prod + " ";
+	}
+	ResultSet rs3 = stmt.executeQuery("select total from orders");
+	while(rs3.next()) {
+		Double tot = rs3.getDouble("total");
+		System.out.println(x+" Total £"+tot);
+	}
+}
+
+
+
+
 
 
 }

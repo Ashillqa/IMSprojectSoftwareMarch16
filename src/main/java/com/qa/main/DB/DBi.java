@@ -25,7 +25,7 @@ public class DBi {
 	
 	public void createItem(Item item) throws SQLException {
 		List<String> itemName = new ArrayList<>();
-		String prodName = item.getName().replaceAll("[^0-9_-£!\"$%^&*()+=`¬|\\<>.,:;'@#~/?]", "");
+		String prodName = item.getName().replaceAll("[^a-z]", "!");
 		ResultSet rs1 = stmt.executeQuery("SELECT name from items");
 		while(rs1.next()) {
 			itemName.add(rs1.getString("name"));
@@ -34,10 +34,10 @@ public class DBi {
 			System.out.println("can't have an empty name");
 		}else if((itemName.contains(item.getName()))) {
 			System.out.println("This item already exists please update or delete");
-		}else if (prodName.isEmpty()) {
-			stmt.executeUpdate("INSERT INTO items (name,quantity,price)"+ "VALUES('" + item.getName()+"', '" +item.getQuantity()+"', '" +item.getPrice()+"')");
-		}else {
+		}else if (prodName.contains("!")) {
 			System.out.println("Eneter a valid item name please");
+		}else {
+			stmt.executeUpdate("INSERT INTO items (name,quantity,price)"+ "VALUES('" + item.getName()+"', '" +item.getQuantity()+"', '" +item.getPrice()+"')");
 		}
 	}
 	
@@ -85,6 +85,7 @@ public class DBi {
 			if(itemID.contains(item.getId())) {
 				stmt.executeUpdate("DELETE FROM items WHERE product_id = " + item.getId());
 				System.out.println("Item deleted");
+				stmt.executeUpdate("Alter table items AUTO_INCREMENT = "+(item.getId()-1));
 			}else {
 				System.out.println("This ID doesn't exist");
 			}
