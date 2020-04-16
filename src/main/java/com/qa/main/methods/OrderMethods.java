@@ -50,7 +50,7 @@ public class OrderMethods {
 				orderDB.deleteOrder(order);
 			}
 		}catch (Exception e) {
-			System.out.println("something went wrong");
+			System.out.println(e.getMessage());
 		}finally {
 			orderDB.Close();
 		}

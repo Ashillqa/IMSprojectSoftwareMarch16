@@ -35,7 +35,7 @@ public class DBi {
 		}else if((itemName.contains(item.getName()))) {
 			System.out.println("This item already exists please update or delete");
 		}else if (prodName.contains("!")) {
-			System.out.println("Eneter a valid item name please");
+			System.out.println("Enter a valid item name please");
 		}else {
 			stmt.executeUpdate("INSERT INTO items (name,quantity,price)"+ "VALUES('" + item.getName()+"', '" +item.getQuantity()+"', '" +item.getPrice()+"')");
 		}
@@ -56,7 +56,7 @@ public class DBi {
 	public void readAllItems() throws SQLException{
 		ResultSet rs = stmt.executeQuery("SELECT * from items");
 		while(rs.next()) {
-			String name = "product: " + rs.getString("name")+ "\nStock: " + rs.getInt("quantity")+ "\nPrice: £" + rs.getFloat("price")+"\n";
+			String name = "ID: "+rs.getInt("product_id")+ "\nproduct: " + rs.getString("name")+ "\nStock: " + rs.getInt("quantity")+ "\nPrice: £" + rs.getFloat("price")+"\n";
 			System.out.println(name);
 		}
 	}
@@ -71,7 +71,7 @@ public class DBi {
 				stmt.executeUpdate("UPDATE items SET quantity = '" + item.getQuantity() + "', price = '" + item.getPrice() + "' WHERE product_id = " +item.getId());
 				System.out.println("Updated Item");
 			}else {
-				System.out.println("This ID doesn't exist perhaps create it");
+				System.out.println("This ID doesn't exist perhaps create it or read all to see ID's");
 			}
 			
 		}
@@ -85,9 +85,8 @@ public class DBi {
 			if(itemID.contains(item.getId())) {
 				stmt.executeUpdate("DELETE FROM items WHERE product_id = " + item.getId());
 				System.out.println("Item deleted");
-				stmt.executeUpdate("Alter table items AUTO_INCREMENT = "+(item.getId()-1));
 			}else {
-				System.out.println("This ID doesn't exist");
+				System.out.println("This ID doesn't exist read all to see ID's");
 			}
 		}
 	

@@ -7,16 +7,17 @@ public class Customer {
 		private int id;
 		private String firstName;
 		private String surname;
+		private String number;
 		
-		public Customer(String firstName, String surname) {
-			this.firstName = firstName;
-			this.surname=surname;
-		}
-		
-		public Customer( String firstName, String surname,int id) {
+		public Customer(int id,String firstName, String surname,String number) {
 			this.id=id;
 			this.firstName = firstName;
 			this.surname=surname;
+			this.number=number;
+		}
+		
+		public Customer(int id) {
+			this.id=id;
 		}
 
 		public int getId() {
@@ -51,13 +52,14 @@ public class Customer {
 		@Override
 		public String toString() {
 			
-			return "id:" + id + " first name:" + firstName + " surname:" + surname;
+			return "id: " + id + " first name: " + firstName + " surname: " + surname;
 		}
 
 		@Override
 		public int hashCode() {
 			final int prime = 31;
 			int result = 1;
+			result = prime * result + ((number == null) ? 0 : number.hashCode());
 			result = prime * result + ((firstName == null) ? 0 : firstName.hashCode());
 			result = prime * result + id;
 			result = prime * result + ((surname == null) ? 0 : surname.hashCode());
@@ -73,6 +75,11 @@ public class Customer {
 			if (getClass() != obj.getClass())
 				return false;
 			Customer other = (Customer) obj;
+			if (number == null) {
+				if (other.number != null)
+					return false;
+			} else if (!number.equals(other.number))
+				return false;
 			if (firstName == null) {
 				if (other.firstName != null)
 					return false;
@@ -86,6 +93,14 @@ public class Customer {
 			} else if (!surname.equals(other.surname))
 				return false;
 			return true;
+		}
+
+		public String getNumber() {
+			return number;
+		}
+
+		public void setNumber(String number) {
+			this.number = number;
 		}
 
 		
