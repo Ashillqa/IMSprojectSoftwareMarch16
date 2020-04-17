@@ -20,10 +20,7 @@ public class CustMethTest {
 	
 	
 	@Test
-	public void createTest() {
-		assertEquals("calls create in dbc",message,cm.ActionsC("CREATE"));
-	}
-		
+	
 		
 
 	}

@@ -7,7 +7,7 @@ public class Runner {
 		
 		Ims me = new Ims();
 		
-		me.tester();
+		System.out.println(me.tester());
 	}
 
 }

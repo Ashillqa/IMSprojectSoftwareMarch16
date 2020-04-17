@@ -40,38 +40,37 @@ public class Ims {
 	
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	public void tester() throws SQLException {
-		boolean using = true;
-		while(using ==true) {
-			CustomerMethods Cmethod = new CustomerMethods();
+	public String tester() throws SQLException {
+			CustomerMethods Cm = new CustomerMethods();
 			ItemMethods Im = new ItemMethods();
 			OrderMethods Om = new OrderMethods();
 			String xyz  = Ims.dispCat();
 			if(xyz.equals("quit")) {
 				scan.close();
-				Cmethod.scanCloser();
+				Cm.scanCloser();
 				Im.scanCloser();
 				Om.scanCloser();
-				System.out.println("see you soon!");
-				using=false;
-				break;
-			}
-			try {
+				return "see you soon!";
+			}else {
 				String action = Ims.chooseAction();
 				switch(xyz) {
 				case "customers":
-					Cmethod.ActionsC(action);
+					System.out.println(Cm.ActionsC(action));
 					break;
 				case "items":
-					Im.ActionsI(action);
+					System.out.println(Im.ActionsI(action));
 					break;
 				case "orders":
-					Om.ActionsO(action);
+					System.out.println(Om.ActionsO(action));
 					break;
-				}
-			}finally {
-				System.out.println("redirecting");
 			}
-		}
+				return tester();
+			}
+			
 	}	
 }
+	
+	
+	
+	
+	

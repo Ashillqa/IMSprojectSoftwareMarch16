@@ -24,7 +24,7 @@ public class DBo {
 	}
 	
 	
-public void createOrder(Orders order) throws SQLException {
+public String createOrder(Orders order) throws SQLException {
 		float price = 0;
 		int cid =0;
 		int pid =0;
@@ -53,21 +53,21 @@ public void createOrder(Orders order) throws SQLException {
 		}
 	////////////////////////////////////////////////////////////////////////////////////////	
 		if(pid==0||pid!=order.getPid()) {
-			System.out.println("this item does not exist perhaps read all items to view ID's");
+			return "this item does not exist perhaps read all items to view ID's";
 		}else if(cid==0||cid!=order.getCid()) {
-			System.out.println("Cant find this customer id sorry perhaps read all customers to view ID's");
+			return "Cant find this customer id sorry perhaps read all customers to view ID's";
 		}else if(orderProd.contains(order.getPid())) {
-			System.out.println("This item is in an existing order please update rather than create");
+			return "This item is in an existing order please update rather than create";
 		}else if (stock<0){
-			System.out.println("Insufficient stock");
+			return "Insufficient stock";
 		}else {
 			stmt.executeUpdate("Insert into orders (customer_id,product_id,quantity, total)" + " VALUES ('" + order.getCid() + "', '" + order.getPid() + "', '" + order.getQuantity() + "', '" + (price*order.getQuantity())+ "')");
 			stmt.executeUpdate("UPDATE items set quantity = '"+stock+"' where product_id = "+order.getPid());
-			System.out.println("created");
+			return "created";
 		}	
 	}
 
-public void deleteOrder(Orders order) throws SQLException {
+public String deleteOrder(Orders order) throws SQLException {
 	int orderID =0;
 	int stock = 0;
 	int orderProd = 0;
@@ -83,16 +83,17 @@ public void deleteOrder(Orders order) throws SQLException {
 	}
 	/////////////////////////////////////////
 	if(orderID==0) {
-		System.out.println("order ID does not match");
+		return "order ID does not match";
 	}else {
 		stmt.executeUpdate("DELETE from orders WHERE order_id = "+ order.getOid());
 		stmt.executeUpdate("UPDATE items set quantity = '"+stock+"' where product_id = "+orderProd);
+		return "order deleted and stock updated";
 	}
 	
 	
 }
 
-public void updateOrder(Orders order) throws SQLException {
+public String updateOrder(Orders order) throws SQLException {
 	float price=0;
 	int orderID=0;
 	int orderProd=0;
@@ -132,27 +133,26 @@ public void updateOrder(Orders order) throws SQLException {
 	}
 	
 	if(orderID!=order.getOid()||orderID ==0) {
-		System.out.println("order id does not exist");
+		return "order id does not exist";
 	}else if(prodID==0) {
-		System.out.println("item does not exist");
+		return "item does not exist";
 	}else if(order.getQuantity()>new_quantity){
-		System.out.println("insufficient Stock");
+		return "insufficient Stock";
 	}else if(order.getPid() == orderProd) {
-		System.out.println(stock);
 		stmt.executeUpdate("UPDATE orders SET quantity = '" + order.getQuantity() + "', total = '" + (price*order.getQuantity()) + "' WHERE order_id = " +orderID);
 		stmt.executeUpdate("UPDATE items set quantity = (quantity - '"+(order.getQuantity()-stock)+ "') where product_id = " +order.getPid());
-		System.out.println("quantity updated");
+		return "quantity updated";
 	}else if(prodbyCust.contains(order.getPid())) {
-		System.out.println("find order no. you have this product in seperate order to update or delete.");
+		return "find order no. you have this product in seperate order to update or delete.";
 	}else {
 		stmt.executeUpdate("UPDATE orders SET product_id = '" + order.getPid() + "', quantity = '" + order.getQuantity() + "', total = '" + (price*order.getQuantity()) + "' WHERE order_id = " +orderID);
 		stmt.executeUpdate("UPDATE items set quantity = (quantity - '"+order.getQuantity()+ "' where product_id = "+ order.getPid());
 		stmt.executeUpdate("UPDATE items set quantity = (quantity + '"+stock+ "' where product_id = "+ orderProd);
-		System.out.println("basket changed,item stock updated");
+		return "basket changed,item stock updated";
 	}
 }
 
-public void readOrder(Orders order) throws SQLException{
+public String readOrder(Orders order) throws SQLException{
 	String x="";
 	Double tot = 0D;
 	int quant = 0;
@@ -172,19 +172,20 @@ public void readOrder(Orders order) throws SQLException{
 		 quant = rs3.getInt("quantity");
 	}
 	if(x.equals("")) {
-		System.out.println("order does not exist read all orders to view ID's");
+		return "order does not exist read all orders to view ID's";
 	}else {
-		System.out.println(x+quant +" Total £"+tot);
+		return x+quant +" Total £"+tot;
 	}
 }
 
-public void readAllOrders() throws SQLException {
-	
+public String readAllOrders() throws SQLException {
+	String name = "";
 	ResultSet rs2 =  stmt.executeQuery("Select order_id, first_name,last_name,name,placed,total from customers join orders on orders.customer_id = customers.customer_id join items on orders.product_id = items.product_id");
 	while(rs2.next()) {
-		String name = rs2.getInt("order_id")+" "+rs2.getString("first_name")+" "+rs2.getString("last_name")+" " +rs2.getString("name")+" "+rs2.getString("placed")+"  "+rs2.getString("total") +"\n";
+		name = rs2.getInt("order_id")+" "+rs2.getString("first_name")+" "+rs2.getString("last_name")+" " +rs2.getString("name")+" "+rs2.getString("placed")+"  "+rs2.getString("total") +"\n";
 		System.out.println(name);
 	}
+	return "The end";
 }
 
 

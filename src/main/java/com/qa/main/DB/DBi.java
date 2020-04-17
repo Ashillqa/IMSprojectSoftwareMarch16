@@ -23,45 +23,49 @@ public class DBi {
 		conn.close();
 	}
 	
-	public void createItem(Item item) throws SQLException {
+	public String createItem(Item item) throws SQLException {
 		List<String> itemName = new ArrayList<>();
-		String prodName = item.getName().replaceAll("[^a-z]", "!");
+		String prodName = item.getName().replaceAll("[^a-z\\s+]", "!");
 		ResultSet rs1 = stmt.executeQuery("SELECT name from items");
 		while(rs1.next()) {
 			itemName.add(rs1.getString("name"));
 		}
 		if(item.getName().isEmpty()) {
-			System.out.println("can't have an empty name");
+			return "can't have an empty name";
 		}else if((itemName.contains(item.getName()))) {
-			System.out.println("This item already exists please update or delete");
+			return "This item already exists please update or delete";
 		}else if (prodName.contains("!")) {
-			System.out.println("Enter a valid item name please");
+			return "Enter a valid item name please";
 		}else {
 			stmt.executeUpdate("INSERT INTO items (name,quantity,price)"+ "VALUES('" + item.getName()+"', '" +item.getQuantity()+"', '" +item.getPrice()+"')");
+			return "item created";
 		}
 	}
 	
-	public void readItem(Item item) throws SQLException {
+	public String readItem(Item item) throws SQLException {
+		String name = "";
 		ResultSet rs = stmt.executeQuery("SELECT * FROM items WHERE product_id = "+item.getId());
 		while (rs.next()) {
 			if(rs.getString("name").isEmpty()) {
-				System.out.println("item ID does not exist perhaps try readAll ");
+				return "item ID does not exist perhaps try readAll ";
 			}else {
-				String name = "product: " + rs.getString("name")+ "\nStock: " + rs.getInt("quantity")+ "\nPrice: " + rs.getFloat("price");
-				System.out.println(name);
+				name = "product: " + rs.getString("name")+ "\nStock: " + rs.getInt("quantity")+ "\nPrice: " + rs.getFloat("price");
 			}
 		}
+		return name;
 	}
 	
-	public void readAllItems() throws SQLException{
+	public String readAllItems() throws SQLException{
+		String name = "";
 		ResultSet rs = stmt.executeQuery("SELECT * from items");
 		while(rs.next()) {
-			String name = "ID: "+rs.getInt("product_id")+ "\nproduct: " + rs.getString("name")+ "\nStock: " + rs.getInt("quantity")+ "\nPrice: £" + rs.getFloat("price")+"\n";
+			name = "ID: "+rs.getInt("product_id")+ "\nproduct: " + rs.getString("name")+ "\nStock: " + rs.getInt("quantity")+ "\nPrice: £" + rs.getFloat("price")+"\n";
 			System.out.println(name);
 		}
+		return "The end";
 	}
 		
-		public void updateItem(Item item) throws SQLException {
+		public String updateItem(Item item) throws SQLException {
 			List<Integer> itemID = new ArrayList<>();
 			ResultSet rs1 = stmt.executeQuery("SELECT product_id from items");
 			while(rs1.next()) {
@@ -69,14 +73,14 @@ public class DBi {
 			}
 			if(itemID.contains(item.getId())) {
 				stmt.executeUpdate("UPDATE items SET quantity = '" + item.getQuantity() + "', price = '" + item.getPrice() + "' WHERE product_id = " +item.getId());
-				System.out.println("Updated Item");
+				return "Updated Item";
 			}else {
-				System.out.println("This ID doesn't exist perhaps create it or read all to see ID's");
+				return "This ID doesn't exist perhaps create it or read all to see ID's";
 			}
 			
 		}
 		
-		public void deleteItem(Item item) throws SQLException {
+		public String deleteItem(Item item) throws SQLException {
 			List<Integer> itemID = new ArrayList<>();
 			ResultSet rs1 = stmt.executeQuery("SELECT product_id from items");
 			while(rs1.next()) {
@@ -84,9 +88,9 @@ public class DBi {
 			}
 			if(itemID.contains(item.getId())) {
 				stmt.executeUpdate("DELETE FROM items WHERE product_id = " + item.getId());
-				System.out.println("Item deleted");
+				return "Item deleted";
 			}else {
-				System.out.println("This ID doesn't exist read all to see ID's");
+				return "This ID doesn't exist read all to see ID's";
 			}
 		}
 	

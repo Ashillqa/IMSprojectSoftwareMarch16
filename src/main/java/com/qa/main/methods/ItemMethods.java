@@ -11,7 +11,7 @@ public class ItemMethods {
 	
 	
 	
-	public void ActionsI(String act) throws SQLException {
+	public String ActionsI(String act) throws SQLException {
 		DBi itemDB = new DBi();
 		try {
 			if(act.equals("CREATE")) {
@@ -22,7 +22,7 @@ public class ItemMethods {
 				System.out.println("price");
 				float price = Float.parseFloat(scanI.nextLine());
 				Item product = new Item(name,quant,price);
-				itemDB.createItem(product);
+				return itemDB.createItem(product);
 			}else if(act.equals("UPDATE")) {
 				System.out.println("Specify the product ID to apply this change to: ");
 				int pid = Integer.parseInt(scanI.nextLine());
@@ -31,24 +31,24 @@ public class ItemMethods {
 				System.out.println("price");
 				float price = Float.parseFloat(scanI.nextLine());
 				Item product = new Item("",quant,price,pid);
-				itemDB.updateItem(product);
+				return itemDB.updateItem(product);
 			}else if(act.equals("READ")) {
 				System.out.println("ID(Enter 0 to view all): ");
 				int pid = Integer.parseInt(scanI.nextLine());
 				Item product = new Item("",0,0,pid);
 				if(product.getId()==0) {
-					itemDB.readAllItems();
+					return itemDB.readAllItems();
 				}else {
-					itemDB.readItem(product);
+					return itemDB.readItem(product);
 				}
 			}else {
 				System.out.println("Enter the Product ID of the product to delete: ");
 				int pid = Integer.parseInt(scanI.nextLine());
 				Item product = new Item("",0,0,pid);
-				itemDB.deleteItem(product);
+				return itemDB.deleteItem(product);
 			}
 		}catch(Exception e) {
-			System.out.println("something went wrong");
+			return e.getMessage();
 		}finally {
 			itemDB.Close();
 		}
