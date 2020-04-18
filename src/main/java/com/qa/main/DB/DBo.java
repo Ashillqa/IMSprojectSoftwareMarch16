@@ -52,19 +52,27 @@ public String createOrder(Orders order) throws SQLException {
 			stock = rs5.getInt("stock");
 		}
 	////////////////////////////////////////////////////////////////////////////////////////	
-		if(pid==0||pid!=order.getPid()) {
-			return "this item does not exist perhaps read all items to view ID's";
-		}else if(cid==0||cid!=order.getCid()) {
-			return "Cant find this customer id sorry perhaps read all customers to view ID's";
-		}else if(orderProd.contains(order.getPid())) {
-			return "This item is in an existing order please update rather than create";
-		}else if (stock<0){
-			return "Insufficient stock";
-		}else {
-			stmt.executeUpdate("Insert into orders (customer_id,product_id,quantity, total)" + " VALUES ('" + order.getCid() + "', '" + order.getPid() + "', '" + order.getQuantity() + "', '" + (price*order.getQuantity())+ "')");
-			stmt.executeUpdate("UPDATE items set quantity = '"+stock+"' where product_id = "+order.getPid());
-			return "created";
-		}	
+		try{
+			if(pid==0||pid!=order.getPid()) {
+				return "this item does not exist perhaps read all items to view ID's";
+			}else if(cid==0||cid!=order.getCid()) {
+				return "Cant find this customer id sorry perhaps read all customers to view ID's";
+			}else if(orderProd.contains(order.getPid())) {
+				return "This item is in an existing order please update rather than create";
+			}else if (stock<0){
+				return "Insufficient stock";
+			}else {
+				stmt.executeUpdate("Insert into orders (customer_id,product_id,quantity, total)" + " VALUES ('" + order.getCid() + "', '" + order.getPid() + "', '" + order.getQuantity() + "', '" + (price*order.getQuantity())+ "')");
+				stmt.executeUpdate("UPDATE items set quantity = '"+stock+"' where product_id = "+order.getPid());
+				return "created";
+			}
+		}finally {
+			rs1.close();
+			rs2.close();
+			rs3.close();
+			rs4.close();
+			rs5.close();
+		}
 	}
 
 public String deleteOrder(Orders order) throws SQLException {
@@ -82,12 +90,17 @@ public String deleteOrder(Orders order) throws SQLException {
 		stock = rs2.getInt("stock");
 	}
 	/////////////////////////////////////////
-	if(orderID==0) {
-		return "order ID does not match";
-	}else {
-		stmt.executeUpdate("DELETE from orders WHERE order_id = "+ order.getOid());
-		stmt.executeUpdate("UPDATE items set quantity = '"+stock+"' where product_id = "+orderProd);
-		return "order deleted and stock updated";
+	try{
+		if(orderID==0) {
+			return "order ID does not match";
+		}else {
+			stmt.executeUpdate("DELETE from orders WHERE order_id = "+ order.getOid());
+			stmt.executeUpdate("UPDATE items set quantity = '"+stock+"' where product_id = "+orderProd);
+			return "order deleted and stock updated";
+		}
+	}finally {
+		rs.close();
+		rs2.close();
 	}
 	
 	
@@ -132,23 +145,30 @@ public String updateOrder(Orders order) throws SQLException {
 		prodbyCust.add(rs4.getInt("product_id"));
 	}
 	
-	if(orderID!=order.getOid()||orderID ==0) {
-		return "order id does not exist";
-	}else if(prodID==0) {
-		return "item does not exist";
-	}else if(order.getQuantity()>new_quantity){
-		return "insufficient Stock";
-	}else if(order.getPid() == orderProd) {
-		stmt.executeUpdate("UPDATE orders SET quantity = '" + order.getQuantity() + "', total = '" + (price*order.getQuantity()) + "' WHERE order_id = " +orderID);
-		stmt.executeUpdate("UPDATE items set quantity = (quantity - '"+(order.getQuantity()-stock)+ "') where product_id = " +order.getPid());
-		return "quantity updated";
-	}else if(prodbyCust.contains(order.getPid())) {
-		return "find order no. you have this product in seperate order to update or delete.";
-	}else {
-		stmt.executeUpdate("UPDATE orders SET product_id = '" + order.getPid() + "', quantity = '" + order.getQuantity() + "', total = '" + (price*order.getQuantity()) + "' WHERE order_id = " +orderID);
-		stmt.executeUpdate("UPDATE items set quantity = (quantity - '"+order.getQuantity()+ "' where product_id = "+ order.getPid());
-		stmt.executeUpdate("UPDATE items set quantity = (quantity + '"+stock+ "' where product_id = "+ orderProd);
-		return "basket changed,item stock updated";
+	try{
+		if(orderID!=order.getOid()||orderID ==0) {
+			return "order id does not exist";
+		}else if(prodID==0) {
+			return "item does not exist";
+		}else if(order.getQuantity()>new_quantity){
+			return "insufficient Stock";
+		}else if(order.getPid() == orderProd) {
+			stmt.executeUpdate("UPDATE orders SET quantity = '" + order.getQuantity() + "', total = '" + (price*order.getQuantity()) + "' WHERE order_id = " +orderID);
+			stmt.executeUpdate("UPDATE items set quantity = (quantity - '"+(order.getQuantity()-stock)+ "') where product_id = " +order.getPid());
+			return "quantity updated";
+		}else if(prodbyCust.contains(order.getPid())) {
+			return "find order no. you have this product in seperate order to update or delete.";
+		}else {
+			stmt.executeUpdate("UPDATE orders SET product_id = '" + order.getPid() + "', quantity = '" + order.getQuantity() + "', total = '" + (price*order.getQuantity()) + "' WHERE order_id = " +orderID);
+			stmt.executeUpdate("UPDATE items set quantity = (quantity - '"+order.getQuantity()+ "' where product_id = "+ order.getPid());
+			stmt.executeUpdate("UPDATE items set quantity = (quantity + '"+stock+ "' where product_id = "+ orderProd);
+			return "basket changed,item stock updated";
+		}
+	}finally {
+		rs.close();
+		rs2.close();
+		rs3.close();
+		rs4.close();
 	}
 }
 
@@ -171,21 +191,30 @@ public String readOrder(Orders order) throws SQLException{
 		 tot = rs3.getDouble("total");
 		 quant = rs3.getInt("quantity");
 	}
-	if(x.equals("")) {
-		return "order does not exist read all orders to view ID's";
-	}else {
-		return x+quant +" Total £"+tot;
+	try{
+		if(x.equals("")) {
+			return "order does not exist read all orders to view ID's";
+		}else {
+			return x+quant +" Total £"+tot;
+		}
+	}finally {
+		rs1.close();
+		rs2.close();
+		rs3.close();
 	}
 }
 
 public String readAllOrders() throws SQLException {
 	String name = "";
 	ResultSet rs2 =  stmt.executeQuery("Select order_id, first_name,last_name,name,placed,total from customers join orders on orders.customer_id = customers.customer_id join items on orders.product_id = items.product_id");
-	while(rs2.next()) {
-		name = rs2.getInt("order_id")+" "+rs2.getString("first_name")+" "+rs2.getString("last_name")+" " +rs2.getString("name")+" "+rs2.getString("placed")+"  "+rs2.getString("total") +"\n";
-		System.out.println(name);
+	try{
+		while(rs2.next()) {
+			name += rs2.getInt("order_id")+" "+rs2.getString("first_name")+" "+rs2.getString("last_name")+" " +rs2.getString("name")+" "+rs2.getString("placed")+"  "+rs2.getString("total") +"\n";
+		}
+	}finally {
+		rs2.close();
 	}
-	return "The end";
+	return name;
 }
 
 
