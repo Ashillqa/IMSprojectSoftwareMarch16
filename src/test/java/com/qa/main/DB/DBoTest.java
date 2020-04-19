@@ -42,6 +42,11 @@ public class DBoTest {
 		dbo.readOrder(order);
 		Mockito.verify(dbo,Mockito.times(1)).readOrder(order);
 	}
+	@Test
+	public void OrderReadAll() throws SQLException {
+		dbo.readAllOrders();
+		Mockito.verify(dbo,Mockito.times(1)).readAllOrders();
+	}
 	
 
 }

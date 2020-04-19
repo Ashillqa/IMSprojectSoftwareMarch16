@@ -47,6 +47,11 @@ package com.qa.main.DB;
 			dbi.readItem(item);
 			Mockito.verify(dbi, Mockito.times(1)).readItem(item);
 		}
+		@Test
+		public void CustomerReadAll() throws SQLException {
+			dbi.readAllItems();
+			Mockito.verify(dbi,Mockito.times(1)).readAllItems();
+		}
 		
 
 	}

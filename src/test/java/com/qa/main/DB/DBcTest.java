@@ -45,6 +45,11 @@ public class DBcTest {
 		dbc.readCust(customer);
 		Mockito.verify(dbc, Mockito.times(1)).readCust(customer);
 	}
+	@Test
+	public void CustomerReadAll() throws SQLException {
+		dbc.readAllCust();
+		Mockito.verify(dbc,Mockito.times(1)).readAllCust();
+	}
 	
 
 }
