@@ -54,7 +54,7 @@ public class DBi {
 			while (rs.next()) {
 				check = rs.getString("name");
 			}
-			if(rs.getString("name").isEmpty()||check=="") {
+			if(rs.getString("name").isEmpty()||check.equals("")) {
 				return "item ID does not exist perhaps try readAll ";
 			}else {
 				name = "product: " + rs.getString("name")+ "\nStock: " + rs.getInt("quantity")+ "\nPrice: " + rs.getFloat("price");
