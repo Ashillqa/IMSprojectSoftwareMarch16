@@ -1,4 +1,4 @@
-package com.qa.main.DB;
+package com.qa.main.methods;
 
 
 	import java.sql.SQLException;

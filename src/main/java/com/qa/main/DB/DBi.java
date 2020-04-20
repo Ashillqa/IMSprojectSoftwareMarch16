@@ -87,6 +87,8 @@ public class DBi {
 				}
 				if(itemID==0||itemID!=item.getId()) {
 					return "This ID doesn't exist perhaps create it or read all to see ID's";
+				}else if(item.getQuantity()<0){
+					return "Invalid quantity";
 				}else {
 					stmt.executeUpdate("UPDATE items SET quantity = '" + item.getQuantity() + "', price = '" + item.getPrice() + "' WHERE product_id = " +item.getId());
 					return "Updated Item";

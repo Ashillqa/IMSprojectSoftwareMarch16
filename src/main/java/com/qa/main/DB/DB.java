@@ -118,7 +118,7 @@ public class DB {
 					return "This ID doesn't exist!";
 				}else {
 					stmt.executeUpdate("DELETE FROM customers WHERE customer_id = " + customer.getId());
-					return "Deleted\n";
+					return "Deleted";
 				}
 			}finally {
 				rs1.close();

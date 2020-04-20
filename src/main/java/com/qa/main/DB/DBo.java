@@ -209,7 +209,7 @@ public String readAllOrders() throws SQLException {
 	ResultSet rs2 =  stmt.executeQuery("Select order_id, first_name,last_name,name,placed,total from customers join orders on orders.customer_id = customers.customer_id join items on orders.product_id = items.product_id");
 	try{
 		while(rs2.next()) {
-			name += rs2.getInt("order_id")+" "+rs2.getString("first_name")+" "+rs2.getString("last_name")+" " +rs2.getString("name")+" "+rs2.getString("placed")+"  "+rs2.getString("total") +"\n";
+			name += rs2.getInt("order_id")+" "+rs2.getString("first_name")+" "+rs2.getString("last_name")+" " +rs2.getString("name")+" "+rs2.getString("placed")+"  £"+rs2.getString("total") +"\n";
 		}
 	}finally {
 		rs2.close();
