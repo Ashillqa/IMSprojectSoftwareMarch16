@@ -44,7 +44,7 @@ public class DB {
 		ResultSet rs = stmt.executeQuery("SELECT * FROM customers WHERE customer_id = "+customer.getId());
 		
 		try{
-			while (rs.next()) {
+			if (rs.next()) {
 			custID = rs.getInt("customer_id");
 		}
 		if(custID==0) {
