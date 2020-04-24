@@ -47,18 +47,25 @@ public class DBi {
 	}
 	
 	public String readItem(Item item) throws SQLException {
-		String name = "";
-		String check = "";
+		
+		String prod = "";
+		int stock = 0;
+		float price = 0F;
 		ResultSet rs = stmt.executeQuery("SELECT * FROM items WHERE product_id = "+item.getId());
-		try{
-			while (rs.next()) {
-				check = rs.getString("name");
+		if (rs.next()) {
+				String name = rs.getString("name");
+				int quant = rs.getInt("quantity");
+				float cost = rs.getFloat("price");
+				prod = name;
+				stock=quant;
+				price =cost;
 			}
-			if(rs.getString("name").isEmpty()||check.equals("")) {
+		
+		try{
+			if(rs.getString("name").isEmpty()) {
 				return "item ID does not exist perhaps try readAll ";
 			}else {
-				name = "product: " + rs.getString("name")+ "\nStock: " + rs.getInt("quantity")+ "\nPrice: " + rs.getFloat("price");
-				return name;
+				return "Item: "+prod+"\nStock: "+stock+"\nPrice: £"+price;
 			}
 		}finally {
 			rs.close();

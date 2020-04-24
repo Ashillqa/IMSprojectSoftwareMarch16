@@ -18,7 +18,8 @@ public class DBcTest {
 	
 	@Mock 
 	private DB dbc;
-	@InjectMocks
+	@Mock
+	CustomerMethods cm = Mockito.mock(CustomerMethods.class);
 	private Customer customer = new Customer(2,"ash","prt","07769975501");
 	
 	@Test

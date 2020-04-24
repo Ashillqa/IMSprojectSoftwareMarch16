@@ -113,7 +113,7 @@ public String updateOrder(Orders order) throws SQLException {
 	int orderCust = 0;
 	int prodID=0;
 	int stock = 0;
-	int new_quantity=0;
+	int item_quantity=0;
 	List<Integer> prodbyCust = new ArrayList<>();
 	
 	//////////////////////setting calc for total price////////////////////////////////////////////////////
@@ -136,7 +136,7 @@ public String updateOrder(Orders order) throws SQLException {
 	ResultSet rs3 = stmt.executeQuery("SELECT product_id,quantity from items where product_id = "+order.getPid());
 	while(rs3.next()) {
 		prodID=rs3.getInt("product_id");
-		new_quantity=rs3.getInt("quantity");
+		item_quantity=rs3.getInt("quantity");
 	}
 	
 	
@@ -150,7 +150,7 @@ public String updateOrder(Orders order) throws SQLException {
 			return "order id does not exist";
 		}else if(prodID==0) {
 			return "item does not exist";
-		}else if(order.getQuantity()>new_quantity){
+		}else if((order.getQuantity()-stock)>item_quantity){
 			return "insufficient Stock";
 		}else if(order.getPid() == orderProd) {
 			stmt.executeUpdate("UPDATE orders SET quantity = '" + order.getQuantity() + "', total = '" + (price*order.getQuantity()) + "' WHERE order_id = " +orderID);
@@ -160,8 +160,9 @@ public String updateOrder(Orders order) throws SQLException {
 			return "find order no. you have this product in seperate order to update or delete.";
 		}else {
 			stmt.executeUpdate("UPDATE orders SET product_id = '" + order.getPid() + "', quantity = '" + order.getQuantity() + "', total = '" + (price*order.getQuantity()) + "' WHERE order_id = " +orderID);
-			stmt.executeUpdate("UPDATE items set quantity = (quantity - '"+order.getQuantity()+ "' where product_id = "+ order.getPid());
-			stmt.executeUpdate("UPDATE items set quantity = (quantity + '"+stock+ "' where product_id = "+ orderProd);
+			stmt.executeUpdate("UPDATE items set quantity = (quantity - '"+order.getQuantity()+ "') where product_id = "+ order.getPid());
+			stmt.executeUpdate("UPDATE items set quantity =(quantity +'"+stock+"') WHERE product_id = "+orderProd);
+			//stmt.executeUpdate("UPDATE items set quantity = (quantity + '"+stock+ "' where product_id = "+ orderProd);
 			return "basket changed,item stock updated";
 		}
 	}finally {
