@@ -119,7 +119,7 @@ Example:
 * **Christopher Perrins** - *Acknowledgement - SonarQube shell commands* - [Chris](https://github.com/christophperrins)
 * **Jordan Harrison** - *Acknowledgement - Databse Configuration* - [Jordan](https://github.com/JHarry444)
 
-##License
+## License
 
 This project is licensed under the MIT license - see the [LICENSE.md](LICENSE.md) file for details
 
