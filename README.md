@@ -1,4 +1,4 @@
-# IMSprojectSoftwareMarch16
+# IMSprojectSoftwareMarch16 By Ashill Pathak
 This project links a Google Cloud Platform MySQL instance to a Java application via JDBC, allowing us to manage the tables within the instance i.e. customers, items and orders. The project is a Maven project using the Eclipse IDE, with JUnit & Mockito for tests. Version control was done using GitHub allowing me to keep track of my code and commits. A CI Server was set up using Jenkins which created the build meaning that I could gain static analysis of my code from SonarQube and store the artifacts on Nexus via seperate build steps all in Jenkins.
 
 ## Setting up the environment
