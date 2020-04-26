@@ -113,11 +113,15 @@ Example:
 
 * [ERD](https://www.lucidchart.com) - Entity Relationship Diagram
 
-## Authors
+## Authors/Acknowledgements
 
-* **Ashill Pathak** - *Main* - [Ashill](https://github.com/Ashillqa)
-* **Christopher Perrins** - *SonarQube shell commands* - [Chris](https://github.com/christophperrins)
-* **Jordan Harrison** - *Databse Configuration* - [Jordan](https://github.com/JHarry444)
+* **Ashill Pathak** - *Main Author* - [Ashill](https://github.com/Ashillqa)
+* **Christopher Perrins** - *Acknowledgement - SonarQube shell commands* - [Chris](https://github.com/christophperrins)
+* **Jordan Harrison** - *Acknowledgement - Databse Configuration* - [Jordan](https://github.com/JHarry444)
+
+##License
+
+This project is licensed under the MIT license - see the [LICENSE.md](LICENSE.md) file for details
 
 
 
